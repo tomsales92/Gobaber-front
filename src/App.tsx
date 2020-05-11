@@ -1,16 +1,15 @@
-import React from "react";
+import React from 'react';
 import GobalStyle from './styles/global';
-import SignIn from './pages/SignIn';
+// import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
-
-const App:React.FC = () => {
-
+const App: React.FC = () => {
   return (
-  <>
-    <SignIn/>
-    <GobalStyle />
-  </>
+    <>
+      <SignUp />
+      <GobalStyle />
+    </>
   );
-}
+};
 
 export default App;
