@@ -9,34 +9,46 @@ import { Container, Content, Background } from './styles';
 import getValidationErros from '../../uteis/getValidationErros';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import AuthContext from '../../context/authContext';
+import { AuthContext } from '../../context/authContext';
+
+interface SignFormData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const formref = useRef<FormHandles>(null);
 
-  const { name } = useContext(AuthContext);
-  console.log(`Olá ${name}`);
+  const { signIn } = useContext(AuthContext);
 
-  const handleSubmit = useCallback(async (data: object) => {
-    try {
-      formref.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignFormData) => {
+      try {
+        formref.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .required('Digite um email valido'),
-        password: Yup.string().required('Senha obrigatória'),
-      });
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .required('Digite um email valido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-    } catch (err) {
-      const errors = getValidationErros(err);
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      formref.current?.setErrors(errors);
-    }
-  }, []);
+        signIn({
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err) {
+        const errors = getValidationErros(err);
+
+        formref.current?.setErrors(errors);
+      }
+    },
+    [signIn],
+  );
   return (
     <Container>
       <Content>

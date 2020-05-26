@@ -2,14 +2,14 @@ import React from 'react';
 import GobalStyle from './styles/global';
 import SignIn from './pages/SignIn';
 // import SignUp from './pages/SignUp';
-import AuthContext from './context/authContext';
+import { AuthProvider } from './context/authContext';
 
 const App: React.FC = () => {
   return (
     <>
-      <AuthContext.Provider value={{ name: 'Tom' }}>
+      <AuthProvider>
         <SignIn />
-      </AuthContext.Provider>
+      </AuthProvider>
       <GobalStyle />
     </>
   );
