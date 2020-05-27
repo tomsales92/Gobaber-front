@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useContext } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -9,7 +9,7 @@ import { Container, Content, Background } from './styles';
 import getValidationErros from '../../uteis/getValidationErros';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { AuthContext } from '../../context/authContext';
+import { useAuth } from '../../hooks/authContext';
 
 interface SignFormData {
   email: string;
@@ -19,8 +19,7 @@ interface SignFormData {
 const SignIn: React.FC = () => {
   const formref = useRef<FormHandles>(null);
 
-  const { user, signIn } = useContext(AuthContext);
-  console.log(user);
+  const { signIn } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: SignFormData) => {
@@ -43,9 +42,10 @@ const SignIn: React.FC = () => {
           password: data.password,
         });
       } catch (err) {
-        const errors = getValidationErros(err);
-
-        formref.current?.setErrors(errors);
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErros(err);
+          formref.current?.setErrors(errors);
+        }
       }
     },
     [signIn],
